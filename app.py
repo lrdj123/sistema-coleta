@@ -405,6 +405,17 @@ def api_dias_disponiveis():
     conn.close()
     return jsonify([dict(d) for d in dias])
 
+
+@app.route('/admin/material/editar/<int:id>', methods=['POST'])
+def admin_editar_material(id):
+    p = float(request.form['preco_kg'])
+    conn = get_db()
+    conn.execute('UPDATE materiais SET preco_kg=? WHERE id=?', (p, id))
+    conn.commit()
+    conn.close()
+    flash('Preco atualizado!', 'success')
+    return redirect(url_for('admin_materiais'))
+
 if __name__ == "__main__":
     init_db()
     app.run(debug=True, host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
