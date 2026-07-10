@@ -424,6 +424,40 @@ def admin_editar_material(id):
     flash('Preco atualizado!', 'success')
     return redirect(url_for('admin_materiais'))
 
+
+@app.route("/admin/coletas")
+def admin_coletas():
+    conn = get_db()
+    dados = conn.execute("""
+        SELECT c.id, c.funcionario, c.data_coleta, a.nome as cliente
+        FROM coletas c JOIN agendamentos a ON c.agendamento_id = a.id
+        ORDER BY c.created_at DESC
+    """).fetchall()
+    conn.close()
+    return render_template("admin/coletas.html", coletas=dados)
+
+@app.route("/admin/coleta_detalhes/<int:id>")
+def admin_coleta_detalhes(id):
+    conn = get_db()
+    coleta = conn.execute("""
+        SELECT c.*, a.nome as cliente, a.endereco, a.telefone, a.data_coleta as data_agendada, a.horario
+        FROM coletas c JOIN agendamentos a ON c.agendamento_id = a.id WHERE c.id=?
+    """, (id,)).fetchone()
+    if not coleta:
+        conn.close()
+        flash("Coleta nao encontrada!", "error")
+        return redirect(url_for("admin_coletas"))
+    itens = conn.execute("""
+        SELECT i.*, m.nome as material_nome
+        FROM itens_coleta i JOIN materiais m ON i.material_id = m.id WHERE i.coleta_id=?
+    """, (id,)).fetchall()
+    total = conn.execute("""
+        SELECT COALESCE(SUM(valor_total), 0) FROM itens_coleta WHERE coleta_id=?
+    """, (id,)).fetchone()[0]
+    conn.close()
+    return render_template("admin/coleta_detalhes.html", coleta=coleta, itens=itens, total=total)
+
+
 if __name__ == "__main__":
     init_db()
     app.run(debug=True, host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
