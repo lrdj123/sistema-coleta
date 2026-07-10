@@ -3,66 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cliente - Sistema de Coleta</title>
+    <title>Cliente - JF Sucata</title>
     <link rel="stylesheet" href="/static/css/style.css">
 </head>
-<body>
-    <div class="container">
-        <header>
-            <a href="/" class="btn-voltar">← Voltar</a>
-            <h1>👤 Área do Cliente</h1>
-            <p>Agende a coleta de materiais recicláveis</p>
-        </header>
-
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                {% for category, message in messages %}
-                    <div class="alert alert-{{ category }}">{{ message }}</div>
-                {% endfor %}
-            {% endif %}
-        {% endwith %}
-
-        <div class="acoes">
-            <a href="/cliente/agendar" class="btn">📅 Novo Agendamento</a>
-        </div>
-
-        <h2>Meus Agendamentos</h2>
-        {% if agendamentos %}
-        <div class="tabela-wrapper">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Cliente</th>
-                        <th>Data</th>
-                        <th>Horário</th>
-                        <th>Status</th>
-                        <th>Ação</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for a in agendamentos %}
-                    <tr>
-                        <td>{{ a.nome }}</td>
-                        <td>{{ a.data_coleta }}</td>
-                        <td>{{ a.horario }}</td>
-                        <td>
-                            {% if a.status == 'agendado' %}
-                                <span class="status status-agendado">📌 Agendado</span>
-                            {% elif a.status == 'coletado' %}
-                                <span class="status status-coletado">✅ Coletado</span>
-                            {% else %}
-                                <span class="status">{{ a.status }}</span>
-                            {% endif %}
-                        </td>
-                        <td><a href="/cliente/visualizar/{{ a.id }}" class="btn-sm">Ver</a></td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-        {% else %}
-        <p class="vazio">Nenhum agendamento ainda. <a href="/cliente/agendar">Agende agora</a>!</p>
-        {% endif %}
-    </div>
-</body>
-</html>
+<body><div class="container">
+<header><a href="/" class="btn-voltar">← Voltar</a><h1>👤 Area do Cliente</h1><p>Solicite a coleta de materiais reciclaveis</p></header>
+{% with messages = get_flashed_messages(with_categories=true) %}{% if messages %}{% for category, message in messages %}<div class="alert alert-{{ category }}">{{ message }}</div>{% endfor %}{% endif %}{% endwith %}
+<div class="acoes"><a href="/cliente/agendar" class="btn">📅 Nova Solicitacao</a></div>
+<h2>Minhas Solicitacoes</h2>
+{% if agendamentos %}<div class="tabela-wrapper"><table><thead><tr><th>Nome</th><th>Data</th><th>Horario</th><th>Status</th></tr></thead><tbody>
+{% for a in agendamentos %}<tr><td>{{ a.nome }}</td><td>{{ a.data_coleta }}</td><td>{{ a.horario }}</td>
+<td>{% if a.status == 'pendente' %}<span class="status status-pendente">⏳ Pendente</span>
+{% elif a.status == 'agendado' %}<span class="status status-agendado">✅ Aprovado</span>
+{% elif a.status == 'recusado' %}<span class="status status-recusado">❌ Recusado{% if a.observacao %} - {{ a.observacao }}{% endif %}</span>
+{% elif a.status == 'coletado' %}<span class="status status-coletado">♻️ Coletado</span>{% endif %}</td></tr>{% endfor %}</tbody></table></div>
+{% else %}<p class="vazio">Nenhuma solicitacao ainda. <a href="/cliente/agendar">Solicite agora</a>!</p>{% endif %}</div></body></html>
