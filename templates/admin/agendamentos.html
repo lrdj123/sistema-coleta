@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agendamentos - Admin</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a href="/admin" class="btn-voltar">← Voltar</a>
+            <h1>📋 Todos os Agendamentos</h1>
+        </header>
+
+        <div class="tabela-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Cliente</th>
+                        <th>Telefone</th>
+                        <th>Endereço</th>
+                        <th>Data</th>
+                        <th>Horário</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for a in agendamentos %}
+                    <tr>
+                        <td>{{ a.id }}</td>
+                        <td>{{ a.nome }}</td>
+                        <td>{{ a.telefone }}</td>
+                        <td>{{ a.endereco }}</td>
+                        <td>{{ a.data_coleta }}</td>
+                        <td>{{ a.horario }}</td>
+                        <td>
+                            {% if a.status == 'agendado' %}
+                                <span class="status status-agendado">📌 Agendado</span>
+                            {% elif a.status == 'coletado' %}
+                                <span class="status status-coletado">✅ Coletado</span>
+                            {% else %}
+                                <span class="status">{{ a.status }}</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <a href="/admin" class="btn">← Voltar ao painel</a>
+    </div>
+</body>
+</html>
