@@ -401,3 +401,38 @@ header {
         left: 8px;
     }
 }
+
+/* === AJUSTES VISUAIS JF SUCATA === */
+body {
+    background: url("/static/bg-ferro.jpg") no-repeat center center fixed !important;
+    background-size: cover !important;
+    color: white !important; /* Letras brancas por padrao */
+}
+
+/* Titulos e textos principais em branco para ler no fundo escuro */
+header h1, header p, h2, h3, .vazio {
+    color: #ffffff !important;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.8); /* Sombra para ler melhor */
+}
+
+/* Cards mantem fundo claro mas com texto preto para contraste interno */
+.card, .form, .card-info, .tabela-wrapper, .stat-card {
+    background: rgba(255,255,255,0.95) !important;
+    color: #333 !important; /* Texto preto dentro dos cards brancos */
+    backdrop-filter: blur(5px);
+}
+
+/* Labels do formulario dentro dos cards precisam ser pretas */
+.form label, .form h3, .stat-label {
+    color: #333 !important;
+}
+
+/* Tabelas dentro dos wrappers brancos */
+table {
+    color: #333 !important;
+}
+
+/* Rodape ou avisos fora de cards */
+.container > p {
+    color: white !important;
+}
