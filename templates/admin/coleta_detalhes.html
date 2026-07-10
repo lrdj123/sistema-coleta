@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Detalhes - Admin</title>
+<link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
+<link rel="apple-touch-icon" href="/static/favicon.svg">
+<link rel="manifest" href="/static/manifest.json">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="JF Sucata">
+<meta name="theme-color" content="#2ecc71">
+<link rel="stylesheet" href="/static/css/style.css">
+<style>.vl{font-weight:700;color:#27ae60;}.tf{background:#2ecc71;color:white;padding:12px 20px;border-radius:12px;font-size:1.2em;text-align:center;margin:15px 0;}</style></head>
+<body><div class="container">
+<header><a href="/admin/coletas" class="btn-voltar">← Voltar</a><h1>📋 Detalhes da Coleta #{{ coleta.id }}</h1></header>
+<div class="card-info">
+<p><strong>Cliente:</strong> {{ coleta.cliente }}</p>
+<p><strong>Telefone:</strong> {{ coleta.telefone }}</p>
+<p><strong>Endereco:</strong> {{ coleta.endereco }}</p>
+<p><strong>Funcionario:</strong> {{ coleta.funcionario }}</p>
+<p><strong>Data:</strong> {{ coleta.data_agendada }} as {{ coleta.horario }}</p>
+</div>
+<h3>🧱 Materiais Coletados</h3>
+{% if itens %}<div class="tabela-wrapper"><table><thead><tr><th>Material</th><th>Quantidade (kg)</th><th>Valor</th></tr></thead><tbody>
+{% for i in itens %}<tr><td>{{ i.material_nome }}</td><td>{{ "%.2f"|format(i.quantidade_kg) }} kg</td><td class="vl">R$ {{ "%.2f"|format(i.valor_total) }}</td></tr>{% endfor %}</tbody></table></div>
+<div class="tf">💰 Total: R$ {{ "%.2f"|format(total) }}</div>
+{% else %}<p class="vazio">Nenhum item.</p>{% endif %}
+<a href="/admin/coletas" class="btn">← Voltar</a></div></body></html>
