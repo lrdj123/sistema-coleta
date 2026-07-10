@@ -9,87 +9,150 @@
 <meta name="theme-color" content="#f39c12">
 <link rel="stylesheet" href="/static/css/style.css">
 <style>
-.btn-add-kg {
-    background: #f39c12; color: white; border: none; border-radius: 50%;
-    width: 36px; height: 36px; font-size: 1.3em; font-weight: bold;
-    cursor: pointer; display: inline-flex; align-items: center; justify-content: center;
-}
+.btn-add-kg { background: #f39c12; color: white; border: none; border-radius: 50%; width: 36px; height: 36px; font-size: 1.3em; font-weight: bold; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; }
 .btn-add-kg:hover { background: #e67e22; }
-.btn-remove-kg {
-    background: #e74c3c; color: white; border: none; border-radius: 50%;
-    width: 28px; height: 28px; font-size: 1em; font-weight: bold;
-    cursor: pointer; display: inline-flex; align-items: center; justify-content: center;
-}
+.btn-remove-kg { background: #e74c3c; color: white; border: none; border-radius: 50%; width: 28px; height: 28px; font-size: 1em; font-weight: bold; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; }
 .btn-remove-kg:hover { background: #c0392b; }
-.material-row {
-    background: rgba(255,255,255,0.95); border-radius: 10px;
-    padding: 12px 15px; margin-bottom: 10px; border-left: 4px solid #f39c12;
-}
-.material-header {
-    display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;
-}
+.material-row { background: rgba(255,255,255,0.95); border-radius: 10px; padding: 12px 15px; margin-bottom: 10px; border-left: 4px solid #f39c12; }
+.material-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
 .material-nome { font-weight: 700; font-size: 1.05em; color: #333; }
-.kg-linha {
-    display: flex; align-items: center; gap: 8px; margin-bottom: 6px;
-}
-.kg-linha input {
-    width: 110px; padding: 8px 10px; border: 2px solid #ddd;
-    border-radius: 8px; font-size: 1em; text-align: center;
-}
-.total-material {
-    font-size: 0.9em; color: #666; text-align: right; margin-top: 5px; font-weight: 500;
-}
+.kg-linha { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+.kg-linha input[type="number"] { width: 110px; padding: 8px 10px; border: 2px solid #ddd; border-radius: 8px; font-size: 1em; text-align: center; }
+.total-material { font-size: 0.9em; color: #666; text-align: right; margin-top: 5px; font-weight: 500; }
+.draft-bar { position: sticky; bottom: 0; background: #2c3e50; padding: 10px; text-align: center; border-radius: 10px; margin-top: 15px; }
+.draft-bar button { background: #27ae60; color: white; border: none; padding: 8px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; margin: 0 5px; }
+.draft-bar button.btn-danger { background: #e74c3c; }
+.saved-msg { color: #27ae60; font-size: 0.85em; display: none; }
 </style>
-<script>
-function addKg(id) {
-    var div = document.getElementById('inputs-' + id);
-    var linha = document.createElement('div');
-    linha.className = 'kg-linha';
-    var inp = document.createElement('input');
-    inp.type = 'number'; inp.name = 'quantidade[]';
-    inp.step = '0.1'; inp.min = '0'; inp.placeholder = 'kg';
-    inp.onkeyup = function(){ atualizarTotal(id); };
-    inp.onchange = function(){ atualizarTotal(id); };
-    var btn = document.createElement('button');
-    btn.type = 'button'; btn.className = 'btn-remove-kg';
-    btn.innerHTML = 'x';
-    btn.onclick = function(){ linha.remove(); atualizarTotal(id); };
-    linha.appendChild(inp); linha.appendChild(btn);
-    div.appendChild(linha);
-    inp.focus();
-}
-function atualizarTotal(id) {
-    var div = document.getElementById('inputs-' + id);
-    var inputs = div.querySelectorAll('input[name="quantidade[]"]');
-    var first = document.querySelector('#mat-' + id + ' .kg-linha input');
-    var total = (parseFloat(first ? first.value : 0) || 0);
-    inputs.forEach(function(inp){ total += parseFloat(inp.value) || 0; });
-    document.getElementById('total-' + id).textContent = 'Total: ' + total.toFixed(1) + ' kg';
-}
-</script></head>
+</head>
 <body><a href="/" class="logo-jf">JF</a><div class="container">
-<header><a href="/funcionario" class="btn-voltar">← Voltar</a><h1>🔄 Registrar Coleta</h1><p>Cliente: <strong>{{ agendamento.nome }}</strong></p></header>
+<header><a href="/funcionario" class="btn-voltar">← Voltar</a><h1>&#x1f504; Registrar Coleta</h1><p>Cliente: <strong>{{ agendamento.nome }}</strong></p></header>
 <div class="card-info"><p><strong>Endereco:</strong> {{ agendamento.endereco }}</p><p><strong>Telefone:</strong> {{ agendamento.telefone }}</p><p><strong>Data:</strong> {{ agendamento.data_coleta }} as {{ agendamento.horario }}</p></div>
-<form method="POST" class="form">
-<div class="form-group"><label>Nome do Funcionario *</label><input type="text" name="funcionario" required placeholder="Seu nome"></div>
-<h3>Materiais Coletados</h3>
+<form method="POST" class="form" id="formColeta">
+<div class="form-group"><label>Nome do Funcionario *</label><input type="text" name="funcionario" id="funcionario" required placeholder="Seu nome"></div>
+<h3>&#x2696;&#xfe0f; Materiais Coletados</h3>
 <p style="color:#888;font-size:0.9em;margin-bottom:15px;">Digite os kg de cada material. Clique em <strong>+</strong> para acrescentar mais peso do mesmo material.</p>
 {% for m in materiais %}
-<div class="material-row" id="mat-{{ m.id }}">
+<div class="material-row" id="mat-{{ m.id }}" data-mat-id="{{ m.id }}">
 <div class="material-header">
 <span class="material-nome">{{ m.nome }}</span>
-<button type="button" class="btn-add-kg" onclick="addKg({{ m.id }})">+</button>
+<button type="button" class="btn-add-kg" onclick="addKg({{ m.id }})" title="Adicionar mais kg">+</button>
 </div>
+<div class="kg-linha" data-idx="0">
 <input type="hidden" name="material_id[]" value="{{ m.id }}">
-<div class="kg-linha">
 <input type="number" name="quantidade[]" step="0.1" min="0" placeholder="kg" value="" onkeyup="atualizarTotal({{ m.id }})" onchange="atualizarTotal({{ m.id }})">
 </div>
 <div id="inputs-{{ m.id }}"></div>
 <div class="total-material" id="total-{{ m.id }}">Total: 0.0 kg</div>
 </div>
 {% endfor %}
-<button type="submit" class="btn btn-full btn-success">Finalizar Coleta</button>
+<button type="submit" class="btn btn-full btn-success">&#x2705; Finalizar Coleta</button>
 <p style="text-align:center;color:#888;font-size:0.85em;margin-top:10px;">Os valores serao calculados no escritorio.</p>
 </form>
 <form action="/funcionario/excluir/{{ agendamento.id }}" method="POST" style="margin-top:10px;text-align:center;">
-<button type="submit" class="btn-sm btn-danger" onclick="return confirm('Excluir este agendamento?')">Excluir</button></form></div></body></html>
+<button type="submit" class="btn-sm btn-danger" onclick="return confirm('Excluir este agendamento?')">&#x1f5d1; Excluir</button></form></div>
+
+<script>
+var chaveLocal = 'rascunho_coleta_{{ agendamento.id }}';
+var contadores = {};
+
+function addKg(id) {
+    var div = document.getElementById('inputs-' + id);
+    if (!contadores[id]) contadores[id] = 1;
+    var idx = contadores[id]++;
+    var linha = document.createElement('div');
+    linha.className = 'kg-linha';
+    linha.dataset.idx = idx;
+
+    var hidden = document.createElement('input');
+    hidden.type = 'hidden';
+    hidden.name = 'material_id[]';
+    hidden.value = id;
+
+    var inp = document.createElement('input');
+    inp.type = 'number';
+    inp.name = 'quantidade[]';
+    inp.step = '0.1';
+    inp.min = '0';
+    inp.placeholder = 'kg';
+    inp.onkeyup = function(){ atualizarTotal(id); };
+    inp.onchange = function(){ atualizarTotal(id); };
+
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'btn-remove-kg';
+    btn.innerHTML = 'x';
+    btn.onclick = function() {
+        linha.remove();
+        atualizarTotal(id);
+    };
+
+    linha.appendChild(hidden);
+    linha.appendChild(inp);
+    linha.appendChild(btn);
+    div.appendChild(linha);
+    inp.focus();
+}
+
+function atualizarTotal(id) {
+    var row = document.getElementById('mat-' + id);
+    var inputs = row.querySelectorAll('input[name="quantidade[]"]');
+    var total = 0;
+    inputs.forEach(function(inp) { total += parseFloat(inp.value) || 0; });
+    document.getElementById('total-' + id).textContent = 'Total: ' + total.toFixed(1) + ' kg';
+}
+
+function salvarRascunho() {
+    var dados = {};
+    dados.funcionario = document.getElementById('funcionario').value;
+    dados.materiais = {};
+    var rows = document.querySelectorAll('.material-row');
+    rows.forEach(function(row) {
+        var mid = row.dataset.matId;
+        var vals = [];
+        row.querySelectorAll('input[name="quantidade[]"]').forEach(function(inp) {
+            var v = inp.value;
+            if (v) vals.push(v);
+        });
+        if (vals.length > 0) dados.materiais[mid] = vals;
+    });
+    localStorage.setItem(chaveLocal, JSON.stringify(dados));
+    document.getElementById('saved-msg').style.display = 'inline';
+    setTimeout(function(){ document.getElementById('saved-msg').style.display = 'none'; }, 2000);
+}
+
+function carregarRascunho() {
+    var raw = localStorage.getItem(chaveLocal);
+    if (!raw) return;
+    try {
+        var dados = JSON.parse(raw);
+        if (dados.funcionario) document.getElementById('funcionario').value = dados.funcionario;
+        if (dados.materiais) {
+            var rows = document.querySelectorAll('.material-row');
+            rows.forEach(function(row) {
+                var mid = row.dataset.matId;
+                var vals = dados.materiais[mid];
+                if (vals && vals.length > 0) {
+                    var firstInp = row.querySelector('.kg-linha input[name="quantidade[]"]');
+                    if (firstInp) firstInp.value = vals[0];
+                    for (var i = 1; i < vals.length; i++) {
+                        addKg(parseInt(mid));
+                        var div = document.getElementById('inputs-' + mid);
+                        var extraInps = div.querySelectorAll('input[name="quantidade[]"]');
+                        if (extraInps[i-1]) extraInps[i-1].value = vals[i];
+                    }
+                    atualizarTotal(parseInt(mid));
+                }
+            });
+        }
+    } catch(e) {}
+}
+
+function limparRascunho() {
+    localStorage.removeItem(chaveLocal);
+}
+
+window.onload = carregarRascunho;
+</script>
+</body>
+</html>
