@@ -12,7 +12,7 @@
     <meta name="theme-color" content="#3498db">
     <link rel="stylesheet" href="/static/css/style.css">
 </head>
-<body><div class="container">
+<body><a href="/" class="logo-jf">JF</a><div class="container">
 <header><a href="/" class="btn-voltar">← Voltar</a><h1>👤 Area do Cliente</h1><p>Solicite a coleta de materiais reciclaveis</p></header>
 {% with messages = get_flashed_messages(with_categories=true) %}{% if messages %}{% for category, message in messages %}<div class="alert alert-{{ category }}">{{ message }}</div>{% endfor %}{% endif %}{% endwith %}
 <div class="acoes"><a href="/cliente/agendar" class="btn">📅 Nova Solicitacao</a></div>
