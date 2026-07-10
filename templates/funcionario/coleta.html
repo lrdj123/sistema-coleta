@@ -1,117 +1,17 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registrar Coleta</title>
-    <link rel="stylesheet" href="/static/css/style.css">
-</head>
-<body>
-    <div class="container">
-        <header>
-            <a href="/funcionario" class="btn-voltar">← Voltar</a>
-            <h1>🔄 Registrar Coleta</h1>
-        </header>
-
-        <div class="card-info">
-            <h3>📍 Cliente: {{ agendamento.nome }}</h3>
-            <p><strong>Endereço:</strong> {{ agendamento.endereco }}</p>
-            <p><strong>Telefone:</strong> {{ agendamento.telefone }}</p>
-            <p><strong>Agendado para:</strong> {{ agendamento.data_coleta }} às {{ agendamento.horario }}</p>
-        </div>
-
-        <div class="calculadora">
-            <h3>🧮 Calculadora de Materiais</h3>
-            <p>Tipo cada material e a quantidade em kg — o valor calcula automaticamente!</p>
-            
-            <form method="POST" action="/funcionario/finalizar" id="form-coleta">
-                <input type="hidden" name="agendamento_id" value="{{ agendamento.id }}">
-                
-                <div class="form-group">
-                    <label>Nome do funcionário</label>
-                    <input type="text" name="funcionario" required placeholder="Seu nome">
-                </div>
-                
-                <div class="form-group">
-                    <label>Data da coleta</label>
-                    <input type="date" name="data_coleta" required>
-                </div>
-
-                <h4>📦 Materiais Coletados</h4>
-                <div class="tabela-wrapper">
-                    <table id="tabela-materiais">
-                        <thead>
-                            <tr>
-                                <th>Material</th>
-                                <th>Preço/kg</th>
-                                <th>Quantidade (kg)</th>
-                                <th>Valor</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for mat in materiais %}
-                            <tr class="linha-material">
-                                <td>{{ mat.nome }}</td>
-                                <td class="preco-kg">R$ {{ "%.2f"|format(mat.preco_kg) }}</td>
-                                <td>
-                                    <input type="number" step="0.1" min="0" 
-                                           name="material_{{ mat.id }}" 
-                                           class="input-kg" 
-                                           data-preco="{{ mat.preco_kg }}"
-                                           data-material="{{ mat.nome }}"
-                                           placeholder="0,0">
-                                </td>
-                                <td class="valor-material">R$ 0,00</td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                        <tfoot>
-                            <tr>
-                                <td colspan="3"><strong>TOTAL</strong></td>
-                                <td id="total-geral"><strong>R$ 0,00</strong></td>
-                            </tr>
-                        </tfoot>
-                    </table>
-                </div>
-
-                <button type="submit" class="btn btn-full btn-success">✅ Finalizar Coleta</button>
-            </form>
-        </div>
-    </div>
-
-    <script>
-        // Calculadora automática
-        const inputs = document.querySelectorAll('.input-kg');
-        
-        inputs.forEach(input => {
-            input.addEventListener('input', function() {
-                const preco = parseFloat(this.dataset.preco) || 0;
-                const qtd = parseFloat(this.value) || 0;
-                const valor = qtd * preco;
-                
-                // Atualiza o valor da linha
-                const tdValor = this.closest('tr').querySelector('.valor-material');
-                tdValor.textContent = 'R$ ' + valor.toFixed(2);
-                
-                // Atualiza total geral
-                let total = 0;
-                document.querySelectorAll('.valor-material').forEach(td => {
-                    const val = td.textContent.replace('R$ ', '').replace(',', '.');
-                    total += parseFloat(val) || 0;
-                });
-                document.getElementById('total-geral').innerHTML = '<strong>R$ ' + total.toFixed(2) + '</strong>';
-                
-                // Cor do campo
-                if (this.value > 0) {
-                    this.style.backgroundColor = '#d4edda';
-                } else {
-                    this.style.backgroundColor = '';
-                }
-            });
-        });
-
-        // Data padrão = hoje
-        document.querySelector('input[name="data_coleta"]').value = new Date().toISOString().split('T')[0];
-    </script>
-</body>
-</html>
+<html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Registrar Coleta - JF Sucata</title><link rel="stylesheet" href="/static/css/style.css"></head>
+<body><div class="container">
+<header><a href="/funcionario" class="btn-voltar">← Voltar</a><h1>🔄 Registrar Coleta</h1><p>Cliente: <strong>{{ agendamento.nome }}</strong></p></header>
+<div class="card-info"><p><strong>Endereco:</strong> {{ agendamento.endereco }}</p><p><strong>Telefone:</strong> {{ agendamento.telefone }}</p><p><strong>Data:</strong> {{ agendamento.data_coleta }} as {{ agendamento.horario }}</p></div>
+<form method="POST" class="form">
+<div class="form-group"><label>Nome do Funcionario *</label><input type="text" name="funcionario" required placeholder="Seu nome"></div>
+<h3>Materiais Coletados</h3><div id="materiais">
+{% for m in materiais %}<div class="form-inline" style="margin-bottom:8px;">
+<label style="min-width:100px;">{{ m.nome }}</label>
+<input type="hidden" name="material_id[]" value="{{ m.id }}">
+<input type="number" name="quantidade[]" class="input-kg" step="0.1" min="0" placeholder="kg" value="">
+<span class="preco-kg">R$ {{ "%.2f"|format(m.preco_kg) }}/kg</span></div>{% endfor %}</div>
+<button type="submit" class="btn btn-full btn-success">✅ Finalizar Coleta</button></form>
+<form action="/funcionario/excluir/{{ agendamento.id }}" method="POST" style="margin-top:15px;text-align:center;">
+<button type="submit" class="btn btn-danger" onclick="return confirm('Excluir este agendamento?')">🗑️ Excluir</button></form></div></body></html>
