@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Coletas - Admin</title>
+<link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
+<link rel="apple-touch-icon" href="/static/favicon.svg">
+<link rel="manifest" href="/static/manifest.json">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="JF Sucata">
+<meta name="theme-color" content="#2ecc71">
+<link rel="stylesheet" href="/static/css/style.css"></head>
+<body><div class="container">
+<header><a href="/admin" class="btn-voltar">← Voltar</a><h1>📦 Coletas Realizadas</h1><p>Historico completo dos funcionarios</p></header>
+{% with messages = get_flashed_messages(with_categories=true) %}{% if messages %}{% for category, message in messages %}<div class="alert alert-{{ category }}">{{ message }}</div>{% endfor %}{% endif %}{% endwith %}
+{% if coletas %}<div class="tabela-wrapper"><table><thead><tr><th>#</th><th>Cliente</th><th>Funcionario</th><th>Data</th><th>Acao</th></tr></thead><tbody>
+{% for c in coletas %}<tr><td>{{ c.id }}</td><td>{{ c.cliente }}</td><td>{{ c.funcionario }}</td><td>{{ c.data_coleta }}</td>
+<td><a href="/admin/coleta_detalhes/{{ c.id }}" class="btn-sm btn-coleta">📋 Itens</a></td></tr>{% endfor %}</tbody></table></div>
+{% else %}<p class="vazio">Nenhuma coleta registrada ainda.</p>{% endif %}
+<a href="/admin" class="btn" style="margin-top:10px;">← Voltar</a></div></body></html>
