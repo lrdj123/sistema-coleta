@@ -1,0 +1,16 @@
+{
+  "name": "JF Sucata - Coleta",
+  "short_name": "JF Sucata",
+  "description": "Sistema de coleta de materiais reciclaveis",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f0f2f5",
+  "theme_color": "#2ecc71",
+  "icons": [
+    {
+      "src": "/static/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}
