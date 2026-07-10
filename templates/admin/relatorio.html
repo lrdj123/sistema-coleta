@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Relatorio - JF Sucata</title><link rel="stylesheet" href="/static/css/style.css">
+<style>@media print{header,.acoes,.btn,.btn-voltar{display:none!important;}}</style></head>
+<body><div class="container">
+<header><a href="/admin" class="btn-voltar">← Voltar</a><h1>📄 Relatorio de Agendamentos</h1></header>
+<form method="GET" action="/admin/relatorio" class="form-inline" style="margin-bottom:20px;">
+<label>De:</label><input type="date" name="data_inicio" value="{{ data_inicio }}">
+<label>ate:</label><input type="date" name="data_fim" value="{{ data_fim }}">
+<button type="submit" class="btn-sm">🔍 Filtrar</button>
+<button type="button" class="btn-sm btn-success" onclick="window.print()">🖨️ Imprimir</button></form>
+<div class="cards-stats"><div class="stat-card"><span class="stat-num">{{ total_coletas }}</span><span class="stat-label">♻️ Coletados</span></div>
+<div class="stat-card"><span class="stat-num">{{ total_pendentes }}</span><span class="stat-label">⏳ Pendentes</span></div>
+<div class="stat-card"><span class="stat-num">{{ agendamentos|length }}</span><span class="stat-label">📋 Total</span></div></div>
+{% if agendamentos %}<div class="tabela-wrapper"><table><thead><tr><th>#</th><th>Cliente</th><th>Data</th><th>Horario</th><th>Status</th></tr></thead><tbody>
+{% for a in agendamentos %}<tr><td>{{ a.id }}</td><td>{{ a.nome }}</td><td>{{ a.data_coleta }}</td><td>{{ a.horario }}</td>
+<td>{% if a.status == 'pendente' %}⏳ Pendente{% elif a.status == 'agendado' %}✅ Agendado{% elif a.status == 'coletado' %}♻️ Coletado{% else %}❌ Recusado{% endif %}</td></tr>{% endfor %}</tbody></table></div>
+{% else %}<p class="vazio">Nenhum resultado para o periodo.</p>{% endif %}</div></body></html>
