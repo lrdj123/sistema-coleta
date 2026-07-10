@@ -1,6 +1,12 @@
 <!DOCTYPE html>
 <html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Registrar Coleta - JF Sucata</title><link rel="stylesheet" href="/static/css/style.css"></head>
+<title>Registrar Coleta - JF Sucata</title><link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
+    <link rel="apple-touch-icon" href="/static/favicon.svg">
+    <link rel="manifest" href="/static/manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="JF Sucata">
+    <meta name="theme-color" content="#2ecc71">
+    <link rel="stylesheet" href="/static/css/style.css"></head>
 <body><div class="container">
 <header><a href="/funcionario" class="btn-voltar">← Voltar</a><h1>🔄 Registrar Coleta</h1><p>Cliente: <strong>{{ agendamento.nome }}</strong></p></header>
 <div class="card-info"><p><strong>Endereco:</strong> {{ agendamento.endereco }}</p><p><strong>Telefone:</strong> {{ agendamento.telefone }}</p><p><strong>Data:</strong> {{ agendamento.data_coleta }} as {{ agendamento.horario }}</p></div>
