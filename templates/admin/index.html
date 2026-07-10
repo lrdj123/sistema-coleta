@@ -1,108 +1,15 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin - Sistema de Coleta</title>
-    <link rel="stylesheet" href="/static/css/style.css">
-</head>
-<body>
-    <div class="container">
-        <header>
-            <a href="/" class="btn-voltar">← Voltar</a>
-            <h1>📊 Painel Administrativo</h1>
-        </header>
-
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                {% for category, message in messages %}
-                    <div class="alert alert-{{ category }}">{{ message }}</div>
-                {% endfor %}
-            {% endif %}
-        {% endwith %}
-
-        <!-- Cards de resumo -->
-        <div class="cards-stats">
-            <div class="stat-card">
-                <span class="stat-num">{{ total_clientes }}</span>
-                <span class="stat-label">Clientes</span>
-            </div>
-            <div class="stat-card">
-                <span class="stat-num">{{ total_agendamentos }}</span>
-                <span class="stat-label">Agendamentos</span>
-            </div>
-            <div class="stat-card">
-                <span class="stat-num">{{ total_coletas }}</span>
-                <span class="stat-label">Coletas realizadas</span>
-            </div>
-            <div class="stat-card stat-money">
-                <span class="stat-num">R$ {{ "%.2f"|format(total_arrecadado) }}</span>
-                <span class="stat-label">Total arrecadado</span>
-            </div>
-        </div>
-
-        <div class="acoes">
-            <a href="/admin/agendamentos" class="btn">📋 Ver Agendamentos</a>
-            <a href="/admin/materiais" class="btn">📦 Gerenciar Materiais</a>
-        </div>
-
-        <!-- Materiais mais coletados -->
-        <h2>📈 Materiais Mais Coletados</h2>
-        {% if materiais_resumo %}
-        <div class="tabela-wrapper">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Material</th>
-                        <th>Total (kg)</th>
-                        <th>Valor Total</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for m in materiais_resumo %}
-                    <tr>
-                        <td>{{ m.nome }}</td>
-                        <td>{{ "%.1f"|format(m.total_kg) }} kg</td>
-                        <td>R$ {{ "%.2f"|format(m.total_valor) }}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-        {% else %}
-        <p class="vazio">Nenhuma coleta registrada ainda.</p>
-        {% endif %}
-
-        <!-- Últimas coletas -->
-        <h2>🕐 Últimas Coletas</h2>
-        {% if ultimas_coletas %}
-        <div class="tabela-wrapper">
-            <table>
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Cliente</th>
-                        <th>Funcionário</th>
-                        <th>Data</th>
-                        <th>Total</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for c in ultimas_coletas %}
-                    <tr>
-                        <td>{{ c.id }}</td>
-                        <td>{{ c.cliente_nome }}</td>
-                        <td>{{ c.funcionario }}</td>
-                        <td>{{ c.data_coleta }}</td>
-                        <td><strong>R$ {{ "%.2f"|format(c.total_coleta) }}</strong></td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-        {% else %}
-        <p class="vazio">Nenhuma coleta registrada ainda.</p>
-        {% endif %}
-    </div>
-</body>
-</html>
+<html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin - JF Sucata</title><link rel="stylesheet" href="/static/css/style.css"></head>
+<body><div class="container">
+<header><a href="/" class="btn-voltar">← Voltar</a><h1>📊 Painel Administrativo</h1><p>Gestao do sistema</p></header>
+{% with messages = get_flashed_messages(with_categories=true) %}{% if messages %}{% for category, message in messages %}<div class="alert alert-{{ category }}">{{ message }}</div>{% endfor %}{% endif %}{% endwith %}
+<div class="cards-stats">
+<div class="stat-card"><span class="stat-num" style="color:#f39c12;">{{ pendentes }}</span><span class="stat-label">⏳ Pendentes</span></div>
+<div class="stat-card"><span class="stat-num" style="color:#3498db;">{{ agendados }}</span><span class="stat-label">✅ Agendados</span></div>
+<div class="stat-card"><span class="stat-num" style="color:#27ae60;">{{ coletados }}</span><span class="stat-label">♻️ Coletados</span></div></div>
+<div class="acoes" style="flex-direction:column;">
+<a href="/admin/agendamentos" class="btn btn-full">📋 Ver Todos os Agendamentos</a>
+<a href="/admin/dias" class="btn btn-full" style="background:#8e44ad;">📆 Gerenciar Dias Disponiveis</a>
+<a href="/admin/materiais" class="btn btn-full" style="background:#f39c12;">🧱 Gerenciar Materiais</a>
+<a href="/admin/relatorio" class="btn btn-full" style="background:#27ae60;">📄 Relatorio / Imprimir</a></div></div></body></html>
