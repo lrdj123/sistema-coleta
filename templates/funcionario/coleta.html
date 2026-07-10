@@ -1,23 +1,30 @@
 <!DOCTYPE html>
 <html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Registrar Coleta - JF Sucata</title><link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
-    <link rel="apple-touch-icon" href="/static/favicon.svg">
-    <link rel="manifest" href="/static/manifest.json">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-title" content="JF Sucata">
-    <meta name="theme-color" content="#2ecc71">
-    <link rel="stylesheet" href="/static/css/style.css"></head>
+<title>Registrar Coleta - JF Sucata</title>
+<link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
+<link rel="apple-touch-icon" href="/static/favicon.svg">
+<link rel="manifest" href="/static/manifest.json">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="JF Sucata">
+<meta name="theme-color" content="#2ecc71">
+<link rel="stylesheet" href="/static/css/style.css">
+<style>.vl{font-weight:700;color:#27ae60;min-width:80px;text-align:right;}.tg{background:#2ecc71;color:white;padding:15px 20px;border-radius:12px;text-align:center;font-size:1.3em;font-weight:700;margin-top:15px;}</style>
+<script>function calc(){var p={};{% for m in materiais %}p[{{ m.id }}]={{ m.preco_kg }};{% endfor %}var t=0,q=document.querySelectorAll("input[name='quantidade[]']"),v=document.querySelectorAll(".vl");q.forEach(function(e,i){var id=document.getElementsByName('material_id[]')[i].value,kg=parseFloat(e.value)||0,val=kg*(p[id]||0);v[i].textContent='R$ '+val.toFixed(2);t+=val;});document.getElementById('tg').textContent='R$ '+t.toFixed(2);}</script></head>
 <body><div class="container">
 <header><a href="/funcionario" class="btn-voltar">← Voltar</a><h1>🔄 Registrar Coleta</h1><p>Cliente: <strong>{{ agendamento.nome }}</strong></p></header>
 <div class="card-info"><p><strong>Endereco:</strong> {{ agendamento.endereco }}</p><p><strong>Telefone:</strong> {{ agendamento.telefone }}</p><p><strong>Data:</strong> {{ agendamento.data_coleta }} as {{ agendamento.horario }}</p></div>
 <form method="POST" class="form">
 <div class="form-group"><label>Nome do Funcionario *</label><input type="text" name="funcionario" required placeholder="Seu nome"></div>
-<h3>Materiais Coletados</h3><div id="materiais">
-{% for m in materiais %}<div class="form-inline" style="margin-bottom:8px;">
-<label style="min-width:100px;">{{ m.nome }}</label>
+<h3>⚖️ Materiais Coletados</h3>
+<p style="color:#888;font-size:0.9em;margin-bottom:15px;">Digite o peso em kg de cada material coletado:</p>
+{% for m in materiais %}<div class="form-inline" style="margin-bottom:10px;align-items:center;">
+<label style="min-width:110px;font-weight:600;">{{ m.nome }}</label>
 <input type="hidden" name="material_id[]" value="{{ m.id }}">
-<input type="number" name="quantidade[]" class="input-kg" step="0.1" min="0" placeholder="kg" value="">
-<span class="preco-kg">R$ {{ "%.2f"|format(m.preco_kg) }}/kg</span></div>{% endfor %}</div>
+<input type="number" name="quantidade[]" class="input-kg" step="0.1" min="0" placeholder="0,0 kg" value="" onkeyup="calc()" onchange="calc()">
+<span class="preco-kg" style="margin:0 8px;">R$ {{ "%.2f"|format(m.preco_kg) }}/kg</span>
+<span class="vl" id="v{{ m.id }}">R$ 0,00</span>
+</div>{% endfor %}
+<div class="tg">💰 Total: <span id="tg">R$ 0,00</span></div>
 <button type="submit" class="btn btn-full btn-success">✅ Finalizar Coleta</button></form>
-<form action="/funcionario/excluir/{{ agendamento.id }}" method="POST" style="margin-top:15px;text-align:center;">
-<button type="submit" class="btn btn-danger" onclick="return confirm('Excluir este agendamento?')">🗑️ Excluir</button></form></div></body></html>
+<form action="/funcionario/excluir/{{ agendamento.id }}" method="POST" style="margin-top:10px;text-align:center;">
+<button type="submit" class="btn-sm btn-danger" onclick="return confirm('Excluir este agendamento?')">🗑 Excluir</button></form></div></body></html>
