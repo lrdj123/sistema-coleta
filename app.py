@@ -188,15 +188,20 @@ def funcionario_coleta(id):
         )
         coleta_id = conn.execute("SELECT last_insert_rowid()").fetchone()[0]
 
-        for i, mat_id in enumerate(itens_raw):
-            qtd = float(quantidades[i]) if quantidades[i] else 0
+        from collections import defaultdict
+        material_totals = defaultdict(float)
+        for mat_id, qtd_str in zip(itens_raw, quantidades):
+            qtd = float(qtd_str) if qtd_str else 0
             if qtd > 0:
-                mat = conn.execute("SELECT * FROM materiais WHERE id=?", (mat_id,)).fetchone()
-                valor = round(qtd * mat["preco_kg"], 2)
-                conn.execute(
-                    "INSERT INTO itens_coleta (coleta_id, material_id, quantidade_kg, valor_total) VALUES (?, ?, ?, ?)",
-                    (coleta_id, mat_id, qtd, valor)
-                )
+                material_totals[mat_id] += qtd
+
+        for mat_id, qtd in material_totals.items():
+            mat = conn.execute("SELECT * FROM materiais WHERE id=?", (mat_id,)).fetchone()
+            valor = round(qtd * mat["preco_kg"], 2)
+            conn.execute(
+                "INSERT INTO itens_coleta (coleta_id, material_id, quantidade_kg, valor_total) VALUES (?, ?, ?, ?)",
+                (coleta_id, mat_id, qtd, valor)
+            )
 
         conn.execute("UPDATE agendamentos SET status='coletado' WHERE id=?", (id,))
         conn.commit()
