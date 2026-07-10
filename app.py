@@ -69,14 +69,7 @@ def init_db():
         );
     """)
     # Seed materiais
-    if conn.execute("SELECT COUNT(*) FROM materiais").fetchone()[0] == 0:
-        materiais = [
-            ("Papelao", 0.50), ("Ferro Velho", 1.20), ("Aluminio", 4.50),
-            ("Plastico", 0.30), ("Vidro", 0.15), ("Cobre", 7.00),
-            ("Aco", 0.80), ("Papel Branco", 0.40), ("Madeira", 0.10),
-            ("Eletronicos", 2.50),
-        ]
-        conn.executemany("INSERT INTO materiais (nome, preco_kg) VALUES (?, ?)", materiais)
+    # Materiais iniciais removidos para deixar o sistema limpo
     conn.commit()
     conn.close()
 
