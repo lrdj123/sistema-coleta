@@ -44,6 +44,11 @@
                                 <span class="status">{{ a.status }}</span>
                             {% endif %}
                         </td>
+                        <td>
+                            <form action="{{ url_for('excluir_agendamento', id=a.id) }}" method="POST" style="display:inline;">
+                                <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Tem certeza que deseja apagar?')">🗑️ Excluir</button>
+                            </form>
+                        </td>
                     </tr>
                     {% endfor %}
                 </tbody>
