@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dias Disponiveis - Admin</title><link rel="stylesheet" href="/static/css/style.css"></head>
+<body><div class="container">
+<header><a href="/admin" class="btn-voltar">← Voltar</a><h1>📆 Dias Disponiveis</h1><p>Defina os dias e horarios que os clientes podem agendar</p></header>
+{% with messages = get_flashed_messages(with_categories=true) %}{% if messages %}{% for category, message in messages %}<div class="alert alert-{{ category }}">{{ message }}</div>{% endfor %}{% endif %}{% endwith %}
+<form method="POST" action="/admin/dias/adicionar" class="form" style="margin-bottom:20px;">
+<h3>Adicionar Disponibilidade</h3>
+<div class="form-group"><label>Data</label><input type="date" name="data" required></div>
+<div class="form-row"><div class="form-group"><label>De</label><input type="time" name="horario_inicio" required></div>
+<div class="form-group"><label>ate</label><input type="time" name="horario_fim" required></div></div>
+<div class="form-group"><label>Vagas</label><input type="number" name="vagas" value="1" min="1" max="10"></div>
+<button type="submit" class="btn btn-full btn-success">➕ Adicionar</button></form>
+<h2>Disponibilidades Cadastradas</h2>
+{% if dias %}<div class="tabela-wrapper"><table><thead><tr><th>Data</th><th>De</th><th>ate</th><th>Vagas</th><th>Acao</th></tr></thead><tbody>
+{% for d in dias %}<tr><td>{{ d.data }}</td><td>{{ d.horario_inicio }}</td><td>{{ d.horario_fim }}</td><td>{{ d.vagas }}</td>
+<td><form action="/admin/dias/excluir/{{ d.id }}" method="POST" style="display:inline;">
+<button type="submit" class="btn-sm btn-danger" onclick="return confirm('Remover?')">🗑️</button></form></td></tr>{% endfor %}</tbody></table></div>
+{% else %}<p class="vazio">Nenhum dia cadastrado ainda.</p>{% endif %}
+<a href="/admin" class="btn" style="margin-top:10px;">← Voltar</a></div></body></html>
