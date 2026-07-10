@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-title" content="JF Admin">
 <meta name="theme-color" content="#8e44ad">
 <link rel="stylesheet" href="/static/css/style.css"></head>
-<body><div class="container">
+<body><a href="/" class="logo-jf">JF</a><div class="container">
 <header><a href="/admin" class="btn-voltar">← Voltar</a><h1>📦 Coletas Realizadas</h1><p>Historico completo dos funcionarios</p></header>
 {% with messages = get_flashed_messages(with_categories=true) %}{% if messages %}{% for category, message in messages %}<div class="alert alert-{{ category }}">{{ message }}</div>{% endfor %}{% endif %}{% endwith %}
 {% if coletas %}<div class="tabela-wrapper"><table><thead><tr><th>#</th><th>Cliente</th><th>Funcionario</th><th>Data</th><th>Acao</th></tr></thead><tbody>
