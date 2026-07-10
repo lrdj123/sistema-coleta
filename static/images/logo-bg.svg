@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 200" width="400" height="200">
+  <style>
+    .bg-text { fill: #e0e0e0; font-family: 'Arial Black', Arial, sans-serif; font-weight: 900; font-size: 60px; text-anchor: middle; dominant-baseline: central; opacity: 0.4; }
+    .bg-sub { fill: #d0d0d0; font-family: Arial, sans-serif; font-size: 22px; text-anchor: middle; dominant-baseline: central; opacity: 0.35; }
+  </style>
+  <text x="200" y="85" class="bg-text">JF SUCATA</text>
+  <text x="200" y="130" class="bg-sub">♻️ Reciclagem</text>
+</svg>
