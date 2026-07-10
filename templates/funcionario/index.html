@@ -1,58 +1,11 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Funcionário - Coletas</title>
-    <link rel="stylesheet" href="/static/css/style.css">
-</head>
-<body>
-    <div class="container">
-        <header>
-            <a href="/" class="btn-voltar">← Voltar</a>
-            <h1>👷 Área do Funcionário</h1>
-            <p>Coletas agendadas para hoje</p>
-        </header>
-
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                {% for category, message in messages %}
-                    <div class="alert alert-{{ category }}">{{ message }}</div>
-                {% endfor %}
-            {% endif %}
-        {% endwith %}
-
-        <h2>📌 Agendamentos Pendentes</h2>
-        {% if agendamentos %}
-        <div class="tabela-wrapper">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Cliente</th>
-                        <th>Endereço</th>
-                        <th>Telefone</th>
-                        <th>Data</th>
-                        <th>Horário</th>
-                        <th>Ação</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for a in agendamentos %}
-                    <tr>
-                        <td>{{ a.nome }}</td>
-                        <td>{{ a.endereco }}</td>
-                        <td>{{ a.telefone }}</td>
-                        <td>{{ a.data_coleta }}</td>
-                        <td>{{ a.horario }}</td>
-                        <td><a href="/funcionario/coleta/{{ a.id }}" class="btn-sm btn-coleta">🔄 Coletar</a></td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-        {% else %}
-        <p class="vazio">🎉 Nenhum agendamento pendente!</p>
-        {% endif %}
-    </div>
-</body>
-</html>
+<html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Funcionario - JF Sucata</title><link rel="stylesheet" href="/static/css/style.css"></head>
+<body><div class="container">
+<header><a href="/" class="btn-voltar">← Voltar</a><h1>👷 Area do Funcionario</h1><p>Coletas agendadas para hoje</p></header>
+{% with messages = get_flashed_messages(with_categories=true) %}{% if messages %}{% for category, message in messages %}<div class="alert alert-{{ category }}">{{ message }}</div>{% endfor %}{% endif %}{% endwith %}
+<h2>📌 Coletas de Hoje</h2>
+{% if agendamentos %}<div class="tabela-wrapper"><table><thead><tr><th>Cliente</th><th>Endereco</th><th>Telefone</th><th>Horario</th><th>Acao</th></tr></thead><tbody>
+{% for a in agendamentos %}<tr><td>{{ a.nome }}</td><td>{{ a.endereco }}</td><td>{{ a.telefone }}</td><td>{{ a.horario }}</td>
+<td><a href="/funcionario/coleta/{{ a.id }}" class="btn-sm btn-coleta">🔄 Coletar</a></td></tr>{% endfor %}</tbody></table></div>
+{% else %}<p class="vazio">🎉 Nenhuma coleta agendada para hoje!</p>{% endif %}</div></body></html>
