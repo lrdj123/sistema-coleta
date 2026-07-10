@@ -262,6 +262,90 @@ tfoot td {
     font-size: 1.1em;
 }
 
+/* Marca JF Sucata - fundo */
+.bg-marca {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 0;
+    pointer-events: none;
+    text-align: center;
+    user-select: none;
+}
+.bg-logo-texto {
+    font-size: 5em;
+    font-weight: 900;
+    color: rgba(0,0,0,0.04);
+    letter-spacing: 4px;
+    white-space: nowrap;
+}
+.bg-logo-sub {
+    font-size: 1.5em;
+    color: rgba(0,0,0,0.03);
+    margin-top: -10px;
+}
+.container {
+    position: relative;
+    z-index: 1;
+}
+
+/* Status extras */
+.status-pendente {
+    background: #fff3cd;
+    color: #856404;
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 0.85em;
+    font-weight: 500;
+}
+.status-recusado {
+    background: #f8d7da;
+    color: #721c24;
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 0.85em;
+    font-weight: 500;
+}
+.status-coletado {
+    background: #d4edda;
+    color: #155724;
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 0.85em;
+    font-weight: 500;
+}
+/* Cards de estatisticas */
+.cards-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 12px;
+    margin: 20px 0;
+}
+.stat-card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+.stat-num {
+    display: block;
+    font-size: 2em;
+    font-weight: 700;
+}
+.stat-label {
+    display: block;
+    font-size: 0.85em;
+    color: #666;
+    margin-top: 4px;
+}
+
+/* Responsivo */
+
 /* Responsivo */
 @media (max-width: 600px) {
     .container { padding: 12px; }
