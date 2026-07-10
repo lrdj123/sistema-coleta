@@ -310,6 +310,16 @@ def api_calcular():
     conn.close()
     return jsonify({'total': round(total, 2), 'detalhes': detalhes})
 
+
+@app.route('/admin/excluir_agendamento/<int:id>', methods=['POST'])
+def excluir_agendamento(id):
+    conn = get_db()
+    conn.execute("DELETE FROM agendamentos WHERE id = ?", (id,))
+    conn.commit()
+    conn.close()
+    flash('🗑️ Agendamento removido com sucesso!', 'info')
+    return redirect(url_for('admin_agendamentos'))
+
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     app.run(debug=True, host='0.0.0.0', port=port)
