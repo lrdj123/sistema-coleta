@@ -14,8 +14,23 @@ def get_db():
     conn.execute("PRAGMA foreign_keys = ON")
     return conn
 
+
 def init_db():
     conn = get_db()
+    # Forçar a criação das colunas se não existirem (MIGRAÇÃO)
+    try:
+        conn.execute("ALTER TABLE agendamentos ADD COLUMN nome TEXT")
+    except: pass
+    try:
+        conn.execute("ALTER TABLE agendamentos ADD COLUMN telefone TEXT")
+    except: pass
+    try:
+        conn.execute("ALTER TABLE agendamentos ADD COLUMN endereco TEXT")
+    except: pass
+    try:
+        conn.execute("ALTER TABLE agendamentos ADD COLUMN observacao TEXT")
+    except: pass
+    
     conn.executescript("""
         CREATE TABLE IF NOT EXISTS clientes (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
