@@ -9,7 +9,5 @@
 <div class="form-group"><label>Preco por Kg (R$)</label><input type="number" name="preco_kg" step="0.01" required placeholder="0.50"></div>
 <button type="submit" class="btn btn-full">➕ Adicionar</button></form>
 {% if materiais %}<div class="tabela-wrapper"><table><thead><tr><th>Material</th><th>Preco/Kg</th><th>Acao</th></tr></thead><tbody>
-{% for m in materiais %}<tr><td>{{ m.nome }}</td><td>R$ {{ "%.2f"|format(m.preco_kg) }}</td>
-<td><form action="/admin/material/excluir/{{ m.id }}" method="POST" style="display:inline;">
-<button type="submit" class="btn-sm btn-danger" onclick="return confirm('Excluir {{ m.nome }}?')">🗑️</button></form></td></tr>{% endfor %}</tbody></table></div>
+{% for m in materiais %}<tr><td>{{ m.nome }}</td><td><form action="{{ url_for('admin_editar_material', id=m.id) }}" method="POST" style="display:inline-flex; gap:5px;"><input type="number" name="preco_kg" step="0.01" value="{{ '%.2f'|format(m.preco_kg) }}" style="width:70px;"><button type="submit" class="btn-sm" style="background:#27ae60; border:none; color:white; cursor:pointer;">💾</button></form></td><td><form action="/admin/material/excluir/{{ m.id }}" method="POST"><button type="submit" class="btn-sm btn-danger">🗑️</button></form></td></tr>{% endfor %}</tbody></table></div>
 {% else %}<p class="vazio">Nenhum material cadastrado.</p>{% endif %}</div></body></html>
