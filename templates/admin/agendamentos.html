@@ -26,7 +26,7 @@
                         <th>Status</th><th>Ações</th>
                     </tr>
                 </thead>
-                <tbody>
+                                <tbody>
                     {% for a in agendamentos %}
                     <tr>
                         <td>{{ a.id }}</td>
@@ -49,6 +49,10 @@
                                 <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Tem certeza que deseja apagar?')">🗑️ Excluir</button>
                             </form>
                         </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="8" style="text-align: center; padding: 20px;">📭 Nenhum agendamento encontrado.</td>
                     </tr>
                     {% endfor %}
                 </tbody>
