@@ -1,72 +1,15 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Materiais - Admin</title>
-    <link rel="stylesheet" href="/static/css/style.css">
-</head>
-<body>
-    <div class="container">
-        <header>
-            <a href="/admin" class="btn-voltar">← Voltar</a>
-            <h1>📦 Gerenciar Materiais e Preços</h1>
-        </header>
-
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                {% for category, message in messages %}
-                    <div class="alert alert-{{ category }}">{{ message }}</div>
-                {% endfor %}
-            {% endif %}
-        {% endwith %}
-
-        <!-- Cadastrar novo material -->
-        <div class="card-info">
-            <h3>➕ Novo Material</h3>
-            <form method="POST" class="form form-inline">
-                <input type="text" name="nome" placeholder="Nome do material" required>
-                <input type="number" step="0.01" min="0" name="preco" placeholder="Preço por kg (R$)" required>
-                <button type="submit" class="btn">Cadastrar</button>
-            </form>
-        </div>
-
-        <!-- Lista de materiais -->
-        <h2>Materiais Cadastrados</h2>
-        {% if materiais %}
-        <div class="tabela-wrapper">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Material</th>
-                        <th>Preço/kg</th>
-                        <th>Ações</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for m in materiais %}
-                    <tr>
-                        <td>
-                            <form method="POST" action="/admin/material/editar/{{ m.id }}" class="form-inline form-edit">
-                                <input type="text" name="nome" value="{{ m.nome }}" required>
-                        </td>
-                        <td>
-                                <input type="number" step="0.01" min="0" name="preco" value="{{ m.preco_kg }}" required>
-                        </td>
-                        <td class="acoes-td">
-                                <button type="submit" class="btn-sm btn-edit">💾 Salvar</button>
-                            </form>
-                            <a href="/admin/material/deletar/{{ m.id }}" class="btn-sm btn-danger" 
-                               onclick="return confirm('Tem certeza?')">🗑️</a>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-        {% else %}
-        <p class="vazio">Nenhum material cadastrado.</p>
-        {% endif %}
-    </div>
-</body>
-</html>
+<html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Materiais - Admin</title><link rel="stylesheet" href="/static/css/style.css"></head>
+<body><div class="container">
+<header><a href="/admin" class="btn-voltar">← Voltar</a><h1>🧱 Gerenciar Materiais</h1></header>
+{% with messages = get_flashed_messages(with_categories=true) %}{% if messages %}{% for category, message in messages %}<div class="alert alert-{{ category }}">{{ message }}</div>{% endfor %}{% endif %}{% endwith %}
+<form method="POST" class="form" style="margin-bottom:20px;">
+<h3>Adicionar Material</h3><div class="form-group"><label>Nome</label><input type="text" name="nome" required placeholder="Ex: Plastico"></div>
+<div class="form-group"><label>Preco por Kg (R$)</label><input type="number" name="preco_kg" step="0.01" required placeholder="0.50"></div>
+<button type="submit" class="btn btn-full">➕ Adicionar</button></form>
+{% if materiais %}<div class="tabela-wrapper"><table><thead><tr><th>Material</th><th>Preco/Kg</th><th>Acao</th></tr></thead><tbody>
+{% for m in materiais %}<tr><td>{{ m.nome }}</td><td>R$ {{ "%.2f"|format(m.preco_kg) }}</td>
+<td><form action="/admin/material/excluir/{{ m.id }}" method="POST" style="display:inline;">
+<button type="submit" class="btn-sm btn-danger" onclick="return confirm('Excluir {{ m.nome }}?')">🗑️</button></form></td></tr>{% endfor %}</tbody></table></div>
+{% else %}<p class="vazio">Nenhum material cadastrado.</p>{% endif %}</div></body></html>
