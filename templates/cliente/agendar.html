@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agendar Coleta</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a href="/cliente" class="btn-voltar">← Voltar</a>
+            <h1>📅 Agendar Coleta</h1>
+        </header>
+
+        <form method="POST" class="form">
+            <div class="form-group">
+                <label>Nome completo</label>
+                <input type="text" name="nome" required placeholder="Seu nome">
+            </div>
+            <div class="form-group">
+                <label>Telefone</label>
+                <input type="text" name="telefone" required placeholder="(11) 99999-9999">
+            </div>
+            <div class="form-group">
+                <label>Endereço</label>
+                <textarea name="endereco" required placeholder="Rua, número, bairro, cidade"></textarea>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Data da coleta</label>
+                    <input type="date" name="data_coleta" required>
+                </div>
+                <div class="form-group">
+                    <label>Horário</label>
+                    <input type="time" name="horario" required>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-full">📌 Agendar Coleta</button>
+        </form>
+    </div>
+
+    <script>
+        // Define data mínima como hoje
+        const hoje = new Date().toISOString().split('T')[0];
+        document.querySelector('input[name="data_coleta"]').setAttribute('min', hoje);
+    </script>
+</body>
+</html>
