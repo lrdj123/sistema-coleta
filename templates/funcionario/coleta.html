@@ -10,7 +10,7 @@
 <link rel="stylesheet" href="/static/css/style.css">
 <style>.vl{font-weight:700;color:#27ae60;min-width:80px;text-align:right;}.tg{background:#2ecc71;color:white;padding:15px 20px;border-radius:12px;text-align:center;font-size:1.3em;font-weight:700;margin-top:15px;}</style>
 <script>function calc(){var p={};{% for m in materiais %}p[{{ m.id }}]={{ m.preco_kg }};{% endfor %}var t=0,q=document.querySelectorAll("input[name='quantidade[]']"),v=document.querySelectorAll(".vl");q.forEach(function(e,i){var id=document.getElementsByName('material_id[]')[i].value,kg=parseFloat(e.value)||0,val=kg*(p[id]||0);v[i].textContent='R$ '+val.toFixed(2);t+=val;});document.getElementById('tg').textContent='R$ '+t.toFixed(2);}</script></head>
-<body><div class="container">
+<body><a href="/" class="logo-jf">JF</a><div class="container">
 <header><a href="/funcionario" class="btn-voltar">← Voltar</a><h1>🔄 Registrar Coleta</h1><p>Cliente: <strong>{{ agendamento.nome }}</strong></p></header>
 <div class="card-info"><p><strong>Endereco:</strong> {{ agendamento.endereco }}</p><p><strong>Telefone:</strong> {{ agendamento.telefone }}</p><p><strong>Data:</strong> {{ agendamento.data_coleta }} as {{ agendamento.horario }}</p></div>
 <form method="POST" class="form">
