@@ -1,0 +1,1 @@
+{"name": "JF Admin", "short_name": "JF Admin", "start_url": "/admin", "display": "standalone", "background_color": "#8e44ad", "theme_color": "#8e44ad", "icons": [{"src": "/static/favicon-admin.svg", "sizes": "192x192", "type": "image/svg+xml"}]}
