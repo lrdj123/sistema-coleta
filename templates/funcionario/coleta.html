@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Registrar Coleta - JF Sucata</title>
-<link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
-<link rel="apple-touch-icon" href="/static/favicon.svg">
+<link rel="icon" type="image/svg+xml" href="/static/favicon-func.svg">
+<link rel="apple-touch-icon" href="/static/favicon-func.svg">
 <link rel="manifest" href="/static/manifest.json">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="JF Sucata">
-<meta name="theme-color" content="#2ecc71">
+<meta name="apple-mobile-web-app-title" content="JF Coleta">
+<meta name="theme-color" content="#f39c12">
 <link rel="stylesheet" href="/static/css/style.css">
 <style>.vl{font-weight:700;color:#27ae60;min-width:80px;text-align:right;}.tg{background:#2ecc71;color:white;padding:15px 20px;border-radius:12px;text-align:center;font-size:1.3em;font-weight:700;margin-top:15px;}</style>
 <script>function calc(){var p={};{% for m in materiais %}p[{{ m.id }}]={{ m.preco_kg }};{% endfor %}var t=0,q=document.querySelectorAll("input[name='quantidade[]']"),v=document.querySelectorAll(".vl");q.forEach(function(e,i){var id=document.getElementsByName('material_id[]')[i].value,kg=parseFloat(e.value)||0,val=kg*(p[id]||0);v[i].textContent='R$ '+val.toFixed(2);t+=val;});document.getElementById('tg').textContent='R$ '+t.toFixed(2);}</script></head>
