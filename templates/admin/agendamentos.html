@@ -1,64 +1,29 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Agendamentos - Admin</title>
-    <link rel="stylesheet" href="/static/css/style.css">
-</head>
-<body>
-    <div class="container">
-        <header>
-            <a href="/admin" class="btn-voltar">← Voltar</a>
-            <h1>📋 Todos os Agendamentos</h1>
-        </header>
-
-        <div class="tabela-wrapper">
-            <table>
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Cliente</th>
-                        <th>Telefone</th>
-                        <th>Endereço</th>
-                        <th>Data</th>
-                        <th>Horário</th>
-                        <th>Status</th><th>Ações</th>
-                    </tr>
-                </thead>
-                                <tbody>
-                    {% for a in agendamentos %}
-                    <tr>
-                        <td>{{ a.id }}</td>
-                        <td>{{ a.nome }}</td>
-                        <td>{{ a.telefone }}</td>
-                        <td>{{ a.endereco }}</td>
-                        <td>{{ a.data_coleta }}</td>
-                        <td>{{ a.horario }}</td>
-                        <td>
-                            {% if a.status == 'agendado' %}
-                                <span class="status status-agendado">📌 Agendado</span>
-                            {% elif a.status == 'coletado' %}
-                                <span class="status status-coletado">✅ Coletado</span>
-                            {% else %}
-                                <span class="status">{{ a.status }}</span>
-                            {% endif %}
-                        </td>
-                        <td>
-                            <form action="{{ url_for('excluir_agendamento', id=a.id) }}" method="POST" style="display:inline;">
-                                <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Tem certeza que deseja apagar?')">🗑️ Excluir</button>
-                            </form>
-                        </td>
-                    </tr>
-                    {% else %}
-                    <tr>
-                        <td colspan="8" style="text-align: center; padding: 20px;">📭 Nenhum agendamento encontrado.</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-        <a href="/admin" class="btn">← Voltar ao painel</a>
-    </div>
-</body>
-</html>
+<html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agendamentos - Admin</title><link rel="stylesheet" href="/static/css/style.css">
+<style>.btn-aprovar{background:#27ae60;color:white;border:none;padding:6px 12px;border-radius:6px;cursor:pointer;font-size:0.85em;}
+.btn-recusar{background:#e74c3c;color:white;border:none;padding:6px 12px;border-radius:6px;cursor:pointer;font-size:0.85em;}
+.status-pendente{background:#fff3cd;color:#856404;}.status-recusado{background:#f8d7da;color:#721c24;}
+.obs-input{width:100%;padding:6px;border:1px solid #ddd;border-radius:4px;font-size:0.85em;}</style></head>
+<body><div class="container">
+<header><a href="/admin" class="btn-voltar">← Voltar</a><h1>📋 Todos os Agendamentos</h1></header>
+{% with messages = get_flashed_messages(with_categories=true) %}{% if messages %}{% for category, message in messages %}<div class="alert alert-{{ category }}">{{ message }}</div>{% endfor %}{% endif %}{% endwith %}
+{% if agendamentos %}<div class="tabela-wrapper"><table><thead><tr><th>#</th><th>Cliente</th><th>Telefone</th><th>Endereco</th><th>Data</th><th>Horario</th><th>Status</th><th>Acoes</th></tr></thead><tbody>
+{% for a in agendamentos %}<tr>
+<td>{{ a.id }}</td><td>{{ a.nome }}</td><td>{{ a.telefone }}</td><td>{{ a.endereco }}</td>
+<td>{{ a.data_coleta }}</td><td>{{ a.horario }}</td>
+<td>{% if a.status == 'pendente' %}<span class="status status-pendente">⏳ Pendente</span>
+{% elif a.status == 'agendado' %}<span class="status status-agendado">✅ Agendado</span>
+{% elif a.status == 'coletado' %}<span class="status status-coletado">♻️ Coletado</span>
+{% elif a.status == 'recusado' %}<span class="status status-recusado">❌ Recusado</span>{% endif %}</td>
+<td><div style="display:flex;gap:4px;flex-wrap:wrap;">
+{% if a.status == 'pendente' %}
+<form action="/admin/aprovar/{{ a.id }}" method="POST" style="display:inline;"><button type="submit" class="btn-aprovar">✅ Aprovar</button></form>
+<form action="/admin/recusar/{{ a.id }}" method="POST" style="display:inline;">
+<input type="text" name="observacao" class="obs-input" placeholder="Motivo (opc)">
+<button type="submit" class="btn-recusar">❌ Recusar</button></form>
+{% endif %}
+<form action="/admin/excluir_agendamento/{{ a.id }}" method="POST" style="display:inline;">
+<button type="submit" class="btn-sm btn-danger" onclick="return confirm('Excluir?')">🗑️</button></form></div></td></tr>{% endfor %}</tbody></table></div>
+{% else %}<p class="vazio">📭 Nenhum agendamento encontrado.</p>{% endif %}
+<a href="/admin" class="btn" style="margin-top:10px;">← Voltar ao painel</a></div></body></html>
