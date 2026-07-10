@@ -8,23 +8,88 @@
 <meta name="apple-mobile-web-app-title" content="JF Coleta">
 <meta name="theme-color" content="#f39c12">
 <link rel="stylesheet" href="/static/css/style.css">
-<style>.vl{font-weight:700;color:#27ae60;min-width:80px;text-align:right;}.tg{background:#2ecc71;color:white;padding:15px 20px;border-radius:12px;text-align:center;font-size:1.3em;font-weight:700;margin-top:15px;}</style>
-<script>function calc(){var p={};{% for m in materiais %}p[{{ m.id }}]={{ m.preco_kg }};{% endfor %}var t=0,q=document.querySelectorAll("input[name='quantidade[]']"),v=document.querySelectorAll(".vl");q.forEach(function(e,i){var id=document.getElementsByName('material_id[]')[i].value,kg=parseFloat(e.value)||0,val=kg*(p[id]||0);v[i].textContent='R$ '+val.toFixed(2);t+=val;});document.getElementById('tg').textContent='R$ '+t.toFixed(2);}</script></head>
+<style>
+.btn-add-kg {
+    background: #f39c12; color: white; border: none; border-radius: 50%;
+    width: 36px; height: 36px; font-size: 1.3em; font-weight: bold;
+    cursor: pointer; display: inline-flex; align-items: center; justify-content: center;
+}
+.btn-add-kg:hover { background: #e67e22; }
+.btn-remove-kg {
+    background: #e74c3c; color: white; border: none; border-radius: 50%;
+    width: 28px; height: 28px; font-size: 1em; font-weight: bold;
+    cursor: pointer; display: inline-flex; align-items: center; justify-content: center;
+}
+.btn-remove-kg:hover { background: #c0392b; }
+.material-row {
+    background: rgba(255,255,255,0.95); border-radius: 10px;
+    padding: 12px 15px; margin-bottom: 10px; border-left: 4px solid #f39c12;
+}
+.material-header {
+    display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;
+}
+.material-nome { font-weight: 700; font-size: 1.05em; color: #333; }
+.kg-linha {
+    display: flex; align-items: center; gap: 8px; margin-bottom: 6px;
+}
+.kg-linha input {
+    width: 110px; padding: 8px 10px; border: 2px solid #ddd;
+    border-radius: 8px; font-size: 1em; text-align: center;
+}
+.total-material {
+    font-size: 0.9em; color: #666; text-align: right; margin-top: 5px; font-weight: 500;
+}
+</style>
+<script>
+function addKg(id) {
+    var div = document.getElementById('inputs-' + id);
+    var linha = document.createElement('div');
+    linha.className = 'kg-linha';
+    var inp = document.createElement('input');
+    inp.type = 'number'; inp.name = 'quantidade[]';
+    inp.step = '0.1'; inp.min = '0'; inp.placeholder = 'kg';
+    inp.onkeyup = function(){ atualizarTotal(id); };
+    inp.onchange = function(){ atualizarTotal(id); };
+    var btn = document.createElement('button');
+    btn.type = 'button'; btn.className = 'btn-remove-kg';
+    btn.innerHTML = 'x';
+    btn.onclick = function(){ linha.remove(); atualizarTotal(id); };
+    linha.appendChild(inp); linha.appendChild(btn);
+    div.appendChild(linha);
+    inp.focus();
+}
+function atualizarTotal(id) {
+    var div = document.getElementById('inputs-' + id);
+    var inputs = div.querySelectorAll('input[name="quantidade[]"]');
+    var first = document.querySelector('#mat-' + id + ' .kg-linha input');
+    var total = (parseFloat(first ? first.value : 0) || 0);
+    inputs.forEach(function(inp){ total += parseFloat(inp.value) || 0; });
+    document.getElementById('total-' + id).textContent = 'Total: ' + total.toFixed(1) + ' kg';
+}
+</script></head>
 <body><a href="/" class="logo-jf">JF</a><div class="container">
 <header><a href="/funcionario" class="btn-voltar">← Voltar</a><h1>🔄 Registrar Coleta</h1><p>Cliente: <strong>{{ agendamento.nome }}</strong></p></header>
 <div class="card-info"><p><strong>Endereco:</strong> {{ agendamento.endereco }}</p><p><strong>Telefone:</strong> {{ agendamento.telefone }}</p><p><strong>Data:</strong> {{ agendamento.data_coleta }} as {{ agendamento.horario }}</p></div>
 <form method="POST" class="form">
 <div class="form-group"><label>Nome do Funcionario *</label><input type="text" name="funcionario" required placeholder="Seu nome"></div>
-<h3>⚖️ Materiais Coletados</h3>
-<p style="color:#888;font-size:0.9em;margin-bottom:15px;">Digite o peso em kg de cada material coletado:</p>
-{% for m in materiais %}<div class="form-inline" style="margin-bottom:10px;align-items:center;">
-<label style="min-width:110px;font-weight:600;">{{ m.nome }}</label>
+<h3>Materiais Coletados</h3>
+<p style="color:#888;font-size:0.9em;margin-bottom:15px;">Digite os kg de cada material. Clique em <strong>+</strong> para acrescentar mais peso do mesmo material.</p>
+{% for m in materiais %}
+<div class="material-row" id="mat-{{ m.id }}">
+<div class="material-header">
+<span class="material-nome">{{ m.nome }}</span>
+<button type="button" class="btn-add-kg" onclick="addKg({{ m.id }})">+</button>
+</div>
 <input type="hidden" name="material_id[]" value="{{ m.id }}">
-<input type="number" name="quantidade[]" class="input-kg" step="0.1" min="0" placeholder="0,0 kg" value="" onkeyup="calc()" onchange="calc()">
-<span class="preco-kg" style="margin:0 8px;">R$ {{ "%.2f"|format(m.preco_kg) }}/kg</span>
-<span class="vl" id="v{{ m.id }}">R$ 0,00</span>
-</div>{% endfor %}
-<div class="tg">💰 Total: <span id="tg">R$ 0,00</span></div>
-<button type="submit" class="btn btn-full btn-success">✅ Finalizar Coleta</button></form>
+<div class="kg-linha">
+<input type="number" name="quantidade[]" step="0.1" min="0" placeholder="kg" value="" onkeyup="atualizarTotal({{ m.id }})" onchange="atualizarTotal({{ m.id }})">
+</div>
+<div id="inputs-{{ m.id }}"></div>
+<div class="total-material" id="total-{{ m.id }}">Total: 0.0 kg</div>
+</div>
+{% endfor %}
+<button type="submit" class="btn btn-full btn-success">Finalizar Coleta</button>
+<p style="text-align:center;color:#888;font-size:0.85em;margin-top:10px;">Os valores serao calculados no escritorio.</p>
+</form>
 <form action="/funcionario/excluir/{{ agendamento.id }}" method="POST" style="margin-top:10px;text-align:center;">
-<button type="submit" class="btn-sm btn-danger" onclick="return confirm('Excluir este agendamento?')">🗑 Excluir</button></form></div></body></html>
+<button type="submit" class="btn-sm btn-danger" onclick="return confirm('Excluir este agendamento?')">Excluir</button></form></div></body></html>
